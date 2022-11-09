@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D8662FD6-44A0-42D1-ACBD-A90940074715}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ArxPkNext</RootNamespace>
+    <AssemblyName>ArxPkNext</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ArxPkNext.cs" />
+    <Compile Include="Lib\Arxivar\models\Profile.cs" />
+    <Compile Include="Lib\Arxivar\models\Contact.cs" />
+    <Compile Include="Lib\Arxivar\services\ContactService.cs" />
+    <Compile Include="Lib\Arxivar\services\ProfileService.cs" />
+    <Compile Include="Lib\Arxivar\services\WcfClient.cs" />
+    <Compile Include="Lib\Controllers\BipController.cs" />
+    <Compile Include="Lib\Http\WebServer.cs" />
+    <Compile Include="Lib\Http\MultipartParser.cs" />
+    <Compile Include="Lib\Http\Response.cs" />
+    <Compile Include="Lib\Util\Extensions.cs" />
+    <Compile Include="Lib\Util\Config.cs" />
+    <Compile Include="Lib\Util\Logger.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Abletech.Arxivar.Client.WCFConnector">
+      <HintPath>..\dll\5.0.0.0\Abletech.Arxivar.Client.WCFConnector.dll</HintPath>
+    </Reference>
+    <Reference Include="Abletech.Arxivar.Entities, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5954fa6a2fb99e64" />
+    <Reference Include="Abletech.Arxivar.Server.Contracts, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5954fa6a2fb99e64, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dll\5.0.0.0\Abletech.Arxivar.Server.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Abletech.Arxivar.Server.PlugIn">
+      <HintPath>..\dll\5.0.0.0\Abletech.Arxivar.Server.PlugIn.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ArxPkNext.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
