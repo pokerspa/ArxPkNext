@@ -26,7 +26,7 @@ namespace Poker.Lib.controllers
                 firstName = multipart.fields["first_name"],
                 lastName = multipart.fields["last_name"],
                 taxId = multipart.fields["tax_id"],
-                birthDay = multipart.fields["birthday"],
+                birthDay = multipart.fields["birth_day"],
             };
             byte[] pdf = multipart.fields["submission_form"].Base64ToByteArray();
             byte[] photo = multipart.fields["passport_photo"].Base64ToByteArray();
