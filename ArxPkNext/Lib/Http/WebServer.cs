@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading;
 using Poker.Lib.Util;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace Poker.Lib.Http
 {
@@ -148,7 +149,7 @@ namespace Poker.Lib.Http
                 catch (Exception e)
                 {
                     Response res = new Response(ref context);
-                    res.SetResponse(e.Message);
+                    res.SetResponse(e.ToString());
                     res.SetStatus(false);
                     res.Send(HttpStatusCode.NotFound);
                 }

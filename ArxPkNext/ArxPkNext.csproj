@@ -32,12 +32,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ArxPkNext.cs" />
+    <Compile Include="Lib\Arxivar\models\SignatureList.cs" />
+    <Compile Include="Lib\Arxivar\models\SignatureOptions.cs" />
     <Compile Include="Lib\Arxivar\models\Profile.cs" />
     <Compile Include="Lib\Arxivar\models\Contact.cs" />
     <Compile Include="Lib\Arxivar\services\ContactService.cs" />
     <Compile Include="Lib\Arxivar\services\ProfileService.cs" />
     <Compile Include="Lib\Arxivar\services\WcfClient.cs" />
     <Compile Include="Lib\Controllers\BipController.cs" />
+    <Compile Include="Lib\FormData\BipFormDataContact.cs" />
     <Compile Include="Lib\Http\WebServer.cs" />
     <Compile Include="Lib\Http\MultipartParser.cs" />
     <Compile Include="Lib\Http\Response.cs" />
@@ -57,6 +60,10 @@
     </Reference>
     <Reference Include="Abletech.Arxivar.Server.PlugIn">
       <HintPath>..\dll\5.0.0.0\Abletech.Arxivar.Server.PlugIn.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dll\5.0.0.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

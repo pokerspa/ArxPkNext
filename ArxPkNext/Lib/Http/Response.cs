@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Newtonsoft.Json;
+using System.Net;
 
 namespace Poker.Lib.Http
 {
@@ -60,7 +61,7 @@ namespace Poker.Lib.Http
 
         public string ToJSON()
         {
-            return new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(pureResponse ? response : this);
+            return JsonConvert.SerializeObject(pureResponse ? response : this);
         }
 
         public void Send(HttpStatusCode status = HttpStatusCode.NotImplemented)

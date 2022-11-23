@@ -48,16 +48,16 @@ namespace Poker.Arxivar.ServerPlugins
             http.RegisterRoute("/apps/bip/create", BipController.Create);
 
             // Get file list for System ID
-            http.RegisterRoute("^/apps/bip/store/(?<SYSTEMID>\\d+-\\w+)/?$", BipController.List);
+            http.RegisterRoute("^/apps/bip/store/(?<SYSTEMID>\\d+-?\\w+)/?$", BipController.List);
 
             // Get file file list for System ID
-            http.RegisterRoute("^/apps/bip/store/(?<SYSTEMID>\\d+-\\w+)/(?<DOCID>\\d+)/?$", BipController.Download);
+            http.RegisterRoute("^/apps/bip/store/(?<SYSTEMID>\\d+-?\\w+)/(?<DOCID>\\d+)/?$", BipController.Download);
 
             // Get file list for System ID
-            http.RegisterRoute("^/apps/bip/seal/(?<SYSTEMID>\\d+-\\w+)/?$", BipController.Seal);
+            http.RegisterRoute("^/apps/bip/seal/(?<SYSTEMID>\\d+-?\\w+)/?$", BipController.Seal);
 
             // Remove profile by System ID
-            http.RegisterRoute("^/apps/bip/destroy/(?<SYSTEMID>\\d+-\\w+)/?$", BipController.Destroy);
+            http.RegisterRoute("^/apps/bip/destroy/(?<SYSTEMID>\\d+-?\\w+)/?$", BipController.Destroy);
         }
 
         public override void On_Services_Stopped()

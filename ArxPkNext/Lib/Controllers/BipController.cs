@@ -18,46 +18,47 @@ namespace Poker.Lib.controllers
         public static void Create(HttpListenerContext context, GroupCollection RouteVars, MultipartParser multipart)
         {
             Response res = new Response(ref context);
-            string id = multipart.fields["id"];
-            string url = string.Format("{0}-{1}", Config.Instance.Retrieve("arxivar", "redirectTo"), id);
-
-            Contact contact = new Contact
+            try
             {
-                firstName = multipart.fields["first_name"],
-                lastName = multipart.fields["last_name"],
-                taxId = multipart.fields["tax_id"],
-                birthDay = multipart.fields["birth_day"],
-            };
-            byte[] pdf = multipart.fields["submission_form"].Base64ToByteArray();
-            byte[] photo = multipart.fields["passport_photo"].Base64ToByteArray();
+                string id = multipart.fields["id"];
+                byte[] pdf = multipart.fields["submission_form"].Base64ToByteArray();
+                byte[] photo = multipart.fields["passport_photo"].Base64ToByteArray();
 
-            using (WCFConnectorManager wcf = WcfClient.Instance.ConnectionManager)
-            {
-                ProfileService profili = new ProfileService();
-
-                try
+                using (WCFConnectorManager wcf = WcfClient.Instance.ConnectionManager)
                 {
-                    Dm_Profile_Result record = profili.Create(id, contact, pdf, photo);
+                    ProfileService profili = new ProfileService();
 
-                    if (record.EXCEPTION == Security_Exception.Nothing)
+                    try
                     {
-                        res.SetResponse("Successfully created document.");
-                        res.SetStatus(true);
-                        res.Send(HttpStatusCode.OK);
+                        Dm_Profile_Result record = profili.Create(id, multipart.fields, pdf, photo);
+
+                        if (record.EXCEPTION == Security_Exception.Nothing)
+                        {
+                            res.SetResponse("Successfully created document.");
+                            res.SetStatus(true);
+                            res.Send(HttpStatusCode.OK);
+                        }
+                        else
+                        {
+                            res.SetResponse(record.MESSAGE);
+                            res.SetStatus(false);
+                            res.Send(HttpStatusCode.InternalServerError);
+                        }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        res.SetResponse(record.MESSAGE);
+                        res.SetResponse("mi sono rotto nell'using " + e.ToString());
                         res.SetStatus(false);
                         res.Send(HttpStatusCode.InternalServerError);
                     }
                 }
-                catch (Exception e)
-                {
-                    res.SetResponse(e.Message);
-                    res.SetStatus(false);
-                    res.Send(HttpStatusCode.InternalServerError);
-                }
+
+            }
+            catch (Exception e)
+            {
+                res.SetResponse("mi sono rotto nei primi 3 " + e.ToString());
+                res.SetStatus(false);
+                res.Send(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -69,12 +70,18 @@ namespace Poker.Lib.controllers
             {
                 ProfileService profili = new ProfileService();
 
-                var files = profili.Select(RouteVars["SYSTEMID"].Value);
+                List<Profile> files = profili.Select(RouteVars["SYSTEMID"].Value);
 
                 if (files.Count > 0)
                 {
                     Dictionary<string, object> d = new Dictionary<string, object>();
+
+                    // Add file list to response
                     d.Add("files", files);
+
+                    // Add hook injection to handle post-sign events
+                    d.Add("script", "hook.js");
+
                     res.SetResponse(d);
                     res.SendPureResponse();
                     res.SetStatus(true);
@@ -143,12 +150,13 @@ namespace Poker.Lib.controllers
             string sysid = RouteVars["SYSTEMID"].Value;
             Response res = new Response(ref context);
             byte[] pdf = multipart.fields["submission_form"].Base64ToByteArray();
+            string hash = multipart.fields["hash"];
 
             using (WCFConnectorManager wcf = WcfClient.Instance.ConnectionManager)
             {
                 ProfileService profili = new ProfileService();
                 Profile doc = profili.Select(sysid)[0];
-                bool update = profili.Update(doc.id, pdf, "richiesta.pdf");
+                bool update = profili.Update(doc.id, pdf, "richiesta.pdf", hash);
 
                 if (update)
                 {

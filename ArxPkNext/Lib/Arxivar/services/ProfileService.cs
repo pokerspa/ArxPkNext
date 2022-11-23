@@ -23,21 +23,27 @@ namespace Poker.Lib.Arxivar.Services
             documentType = Config.Instance.Retrieve("arxivar", "documentType");
         }
 
-        public Dm_Profile_Result Create(string id, Contact contact, in byte[] pdf, in byte[] photo)
+        public Dm_Profile_Result Create(string id, Dictionary<string, string> fields, in byte[] pdf, in byte[] photo)
         {
             Dm_Profile_ForInsert insert = _manager.ARX_DATI.Dm_Profile_ForInsert_Get_New_Instance_ByDocumentTypeCodice(documentType);
 
             insert.Aoo = Config.Instance.Retrieve("arxivar", "aoo");
             insert.DocName = string.Format("Richiesta BIP # {0}", id);
             insert.InOut = DmProfileInOut.Entrata;
-            insert.Stato = Config.Instance.Retrieve("arxivar", "documentState");
+            insert.Stato = Config.Instance.Retrieve("arxivar", "documentState.BEFORE");
             insert.DataDoc = DateTime.Now.Date;
             insert.File = BuildArxFile(pdf, "modulo-richiesta.pdf");
             insert.Attachments.Add(BuildArxFile(photo, "fototessera.jpg"));
 
-            // Fill contact
-            ContactService c = new ContactService();
-            // insert.From = c.GetDatiProfilo(contact.taxId, Dm_DatiProfilo_Campo.MI);
+            ContactService contacts = new ContactService();
+
+            // Fill From field
+            insert.From = contacts.GetOrCreateLink(fields, Dm_DatiProfilo_Campo.MI);
+
+            // Fill CC field
+            List<Dm_DatiProfilo> cc = contacts.GetCopyLinks(fields, Dm_DatiProfilo_Campo.CC);
+            foreach (Dm_DatiProfilo e in cc)
+                insert.Cc.Add(e);
 
             // Fill in request ID field
             Aggiuntivo_String numero_richiesta = insert.Aggiuntivi.FirstOrDefault(x => string.Equals(x.ExternalId, "NUMERO_RICHIESTA", StringComparison.CurrentCultureIgnoreCase)) as Aggiuntivo_String;
@@ -108,18 +114,25 @@ namespace Poker.Lib.Arxivar.Services
             return arxFile.ToMemoryStream();
         }
 
-        public bool Update(int id, in byte[] pdf, string name)
+        public bool Update(int id, in byte[] pdf, string name, string hash)
         {
             ArxGenericException age;
 
             // Attempt document update
-            bool update = _manager.ARX_DOCUMENTI.Dm_Profile_SetDocument_Advanced(
+            bool attachmentUpdate = _manager.ARX_DOCUMENTI.Dm_Profile_SetDocument_Advanced(
                 out age,
                 BuildArxFile(pdf, name),
                 id,
                 string.Empty);
 
-            return update;
+            // Update profile hash
+            Dm_Profile_ForUpdate profile = _manager.ARX_DATI.Dm_Profile_ForUpdate_GetNewInstance(id);
+            profile.Stato = Config.Instance.Retrieve("arxivar", "documentState.AFTER");
+            Aggiuntivo_String hashField = profile.Aggiuntivi.FirstOrDefault(x => string.Equals(x.ExternalId, "SHA256_HASH", StringComparison.CurrentCultureIgnoreCase)) as Aggiuntivo_String;
+            hashField.Valore = hash;
+            Dm_Profile_Result profileUpdate = _manager.ARX_DATI.Dm_Profile_Update(profile, string.Empty);
+
+            return attachmentUpdate && profileUpdate.EXCEPTION == Security_Exception.Nothing;
         }
 
         public bool Destroy(string id)
