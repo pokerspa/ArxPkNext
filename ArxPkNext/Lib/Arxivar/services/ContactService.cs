@@ -97,7 +97,6 @@ namespace Poker.Lib.Arxivar.Services
             }
         }
 
-
         public Dm_Rubrica CreateContact(Dictionary<string, string> data)
         {
             var rubrica = GetAddressBook();

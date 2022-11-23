@@ -145,5 +145,10 @@ namespace Poker.Lib.Arxivar.Services
         {
             return new Arx_File(pdf, name, DateTime.Now.Date);
         }
+
+        public Dm_Profile GetProfileById(int id)
+        {
+            return _manager.ARX_DATI.Dm_Profile_GetData_By_DocNumber(id);
+        }
     }
 }

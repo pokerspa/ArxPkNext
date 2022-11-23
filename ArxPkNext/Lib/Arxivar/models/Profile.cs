@@ -11,7 +11,7 @@ namespace Poker.Lib.Arxivar.Models
         public string path;
         public string hash;
         public Contact contact;
-        public SignatureList signature = new SignatureList { };
+        public SignatureList signature;
 
         public Profile()
         {
@@ -26,6 +26,8 @@ namespace Poker.Lib.Arxivar.Models
             createdAt = (DateTime)e[3];
             path = (string)e[4];
             hash = (string)e[5];
+
+            signature = new SignatureList(id);
         }
     }
 }

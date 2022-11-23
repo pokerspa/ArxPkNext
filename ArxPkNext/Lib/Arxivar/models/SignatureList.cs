@@ -12,15 +12,21 @@ namespace Poker.Lib.Arxivar.Models
         };
         */
 
-        public SignatureOptions Firma = new SignatureOptions { };
+        [JsonProperty(PropertyName = "Firma")]
+        public SignatureOptions Firma;
 
         [JsonProperty(PropertyName = "*def")]
-        public Dictionary<string, object> def = new Dictionary<string, object>() { { "enabled", false }, };
+        public Dictionary<string, object> def = new Dictionary<string, object>() { { "enabled", false } };
 
         [JsonProperty(PropertyName = "*add")]
-        public Dictionary<string, object> add = new Dictionary<string, object>() { { "enabled", false }, };
+        public Dictionary<string, object> add = new Dictionary<string, object>() { { "enabled", false } };
 
         [JsonProperty(PropertyName = "*inv")]
-        public Dictionary<string, object> inv = new Dictionary<string, object>() {  { "enabled", false }, };
+        public Dictionary<string, object> inv = new Dictionary<string, object>() { { "enabled", false } };
+
+        public SignatureList(int id)
+        {
+            Firma = new SignatureOptions(id);
+        }
     }
 }
