@@ -47,7 +47,7 @@ namespace Poker.Lib.Arxivar.Services
                 search.Dm_Rubrica.CODFIS.SetFilter(Dm_Base_Search_Operatore_String.Uguale, data["tax_id"]);
                 search.Dm_Rubrica.CODFIS.forceCaseInsensitive = true;
 
-                search.CONTATTO.SetFilter(Dm_Base_Search_Operatore_String.Nullo_o_Vuoto, "");
+                search.MANSIONE.SetFilterMultiple(Dm_Base_Search_Operatore_String.Uguale, "Richiedente;Genitore/Tutore");
 
                 using (var ds = _manager.ARX_SEARCH.Dm_Contatti_GetData(search, select))
                 {
