@@ -8,7 +8,7 @@ namespace Poker.Lib.Arxivar.Models
         // public decimal[] create = new decimal[] { 0, 126, 265.5, 195, 275.5 };
         public int[] create = new int[] { 0, 126, 266, 196, 276 };
         public string simple = "";
-        public string sms = "";
+        public bool sms = true;
 
         public SignatureOptions(int id)
         {
