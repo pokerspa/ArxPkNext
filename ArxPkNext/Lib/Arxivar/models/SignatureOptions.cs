@@ -1,4 +1,6 @@
-﻿using Poker.Lib.Arxivar.Services;
+﻿using Abletech.Arxivar.Entities;
+using Poker.Lib.Arxivar.Services;
+using System.Text.RegularExpressions;
 
 namespace Poker.Lib.Arxivar.Models
 {
@@ -8,14 +10,15 @@ namespace Poker.Lib.Arxivar.Models
         // public decimal[] create = new decimal[] { 0, 126, 265.5, 195, 275.5 };
         public int[] create = new int[] { 0, 126, 266, 196, 276 };
         public string simple = "";
-        public bool sms = true;
+        public string sms = "";
 
         public SignatureOptions(int id)
         {
             ProfileService profileService = new ProfileService();
-            var profile = profileService.GetProfileById(id);
-            this.simple = profile.MITTENTE;
-            // this.sms = profile.TEL // Dioporco non c'è :facepalm:
+            Dm_Rubrica contact = profileService.GetProfileById(id);
+            this.simple = contact.UCONTATTI;
+            var phone = Regex.Replace(contact.TEL, @"[^\d]", "");
+            this.sms = contact.TEL.StartsWith("+39") ? phone : string.Format("+39{0}", phone);
         }
     }
 }

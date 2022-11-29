@@ -146,9 +146,11 @@ namespace Poker.Lib.Arxivar.Services
             return new Arx_File(pdf, name, DateTime.Now.Date);
         }
 
-        public Dm_Profile GetProfileById(int id)
+        public Dm_Rubrica GetProfileById(int id, Dm_DatiProfilo_Campo field = Dm_DatiProfilo_Campo.MI)
         {
-            return _manager.ARX_DATI.Dm_Profile_GetData_By_DocNumber(id);
+            var profile = _manager.ARX_DATI.Dm_DatiProfilo_GetDataByDocNumberAndCampo(id, field);
+            if (profile.Length < 1) return null;
+            return _manager.ARX_DATI.Dm_Rubrica_Get_DataBySystemId(profile.First().IDRUBRICA);
         }
     }
 }
